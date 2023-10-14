@@ -1,4 +1,3 @@
 <template>
-  <div class="w-full min-h-screen bg-black">
-  </div>
+	<div class="w-full min-h-screen bg-dark-100"></div>
 </template>
