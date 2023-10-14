@@ -15,5 +15,7 @@ module.exports = {
 		'prettier',
 	],
 	plugins: [],
-	rules: {},
+	rules: {
+		'vue/multi-word-component-names': 0,
+	},
 };
