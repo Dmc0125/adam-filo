@@ -16,9 +16,7 @@ const isMenuOpen = ref(false);
 			</nav>
 		</header>
 
-		<div class="w-full max-w-[420px] md:max-w-full px-5 mx-auto">
-			<slot></slot>
-		</div>
+		<slot></slot>
 
 		<footer class="w-full mt-20 p-5 flex justify-between items-end text-gray-100">
 			<ul class="flex flex-col gap-y-2">

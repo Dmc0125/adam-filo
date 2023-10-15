@@ -1,12 +1,15 @@
 <script setup lang="ts">
 type Stat = {
+	isDivider: false;
 	data: string;
 	name: string;
 };
-const stats: Stat[] = [
-	{ data: '173', name: 'Zákaziek' },
-	{ data: '100%', name: 'Zákazníkov doporučuje' },
-	{ data: '100%', name: 'Kvalita komunikácie' },
+const stats: (Stat | { isDivider: true })[] = [
+	{ isDivider: false, data: '173', name: 'Zákaziek' },
+	{ isDivider: true },
+	{ isDivider: false, data: '100%', name: 'Zákazníkov doporučuje' },
+	{ isDivider: true },
+	{ isDivider: false, data: '100%', name: 'Kvalita komunikácie' },
 ];
 
 const { data } = await useFetch('/api/products');
@@ -46,51 +49,65 @@ const logos: Logo[] = [
 </script>
 
 <template>
-	<section id="domov" class="mt-20 w-full">
-		<h1 class="text-gray-100 text-3xl">Vylepšite svoj imidž a urobte pôsobivý prvý dojem</h1>
-		<h2 class="font-[Inter] text-gray-200 text-base mt-5">
+	<section id="domov" class="mt-20 w-full max-w-[1100px] px-5 mx-auto">
+		<h1 class="text-gray-100 text-3xl sm:text-5xl md:text-6xl !leading-[135%]">
+			Vylepšite svoj imidž a urobte pôsobivý prvý dojem
+		</h1>
+		<h2 class="font-[Inter] text-gray-200 text-base sm:text-xl mt-5 sm:max-w-[530px]">
 			Volám sa Adam, som profesionálny grafický dizajnér, najmä dizajnér loga s 3 rokmi skúseností
 			na voľnej nohe.
 		</h2>
-		<div class="flex flex-col gap-y-5 mt-8 font-medium">
+		<div class="flex flex-col sm:flex-row gap-x-10 gap-y-5 mt-8 font-medium">
 			<NuxtLink
 				href="/kontakt"
-				class="w-full bg-theme text-dark-100 h-14 rounded-md text-xl flex items-center justify-center"
+				class="w-full sm:w-[200px] md:w-[290px] h-14 bg-theme text-dark-100 rounded-md text-xl flex items-center justify-center"
 				>Kontaktuje ma</NuxtLink
 			>
 			<NuxtLink
 				href="/#moja-praca"
-				class="w-full bg-dark-200 text-gray-100 h-14 rounded-md text-xl flex items-center justify-center"
+				class="w-full sm:w-[200px] md:w-[290px] h-14 bg-dark-200 text-gray-100 rounded-md text-xl flex items-center justify-center"
 				>Moja práca</NuxtLink
 			>
 		</div>
 	</section>
 
-	<section id="o-mne" class="mt-40 grid w-full">
-		<h2 class="text-gray-100 text-3xl mb-4">O mne</h2>
+	<section
+		id="o-mne"
+		class="mt-40 grid sm:gap-x-16 md:gap-x-20 sm:grid-rows-[min-content_1fr_auto] sm:grid-cols-2 w-full max-w-[420px] sm:max-w-[660px] px-5 md:px-0 mx-auto"
+	>
+		<h2 class="text-gray-100 text-3xl mb-4 sm:col-[2/3]">O mne</h2>
 
 		<img
 			src="/portrait.png"
 			alt="Portrét"
-			class="rounded-md border border-gray-400 w-full"
+			class="rounded-md border border-gray-400 w-full sm:row-[1/3]"
 			loading="lazy"
 		/>
 
-		<p class="mt-8 text-gray-200 text-base">
+		<p class="mt-8 sm:mt-0 text-gray-200 text-base">
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
 			labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
 			laboris nisi ut aliquip ex ea commodo consequat.
 		</p>
 
-		<ul class="mt-12 flex flex-col gap-y-5">
-			<li v-for="stat in stats" :key="stat.name">
-				<h6 class="text-theme font-[Inter] font-semibold text-3xl">{{ stat.data }}</h6>
-				<p class="text-gray-100">{{ stat.name }}</p>
+		<ul class="mt-12 sm:mt-16 flex flex-col sm:flex-row justify-between gap-y-5 sm:col-[1/3]">
+			<li v-for="(stat, i) in stats" :key="i">
+				<h6
+					v-if="!stat.isDivider"
+					class="text-theme font-[Inter] font-semibold text-3xl sm:text-center"
+				>
+					{{ stat.data }}
+				</h6>
+				<p v-if="!stat.isDivider" class="text-gray-100">{{ stat.name }}</p>
+				<div v-if="stat.isDivider" class="hidden sm:block bg-gray-400 h-12 w-[1px]"></div>
 			</li>
 		</ul>
 	</section>
 
-	<section id="cennik" class="mt-[100px]">
+	<section
+		id="cennik"
+		class="mt-[100px] w-full max-w-[420px] sm:max-w-[660px] lg:max-w-[1100px] px-5 md:px-0 lg:px-5 xl:px-0 mx-auto"
+	>
 		<h2 class="text-3xl text-gray-100">Cenník</h2>
 		<p class="text-base text-gray-200 mt-4">
 			Rád Vám pomôžem vytvoriť unikátne, moderné a profesionálne logo, keďže proces tvorby loga je o
@@ -99,18 +116,21 @@ const logos: Logo[] = [
 
 		<NuxtLink
 			href="/kontakt"
-			class="mt-5 block w-full h-10 bg-theme rounded-md flex items-center justify-center"
+			class="mt-5 w-full max-w-[200px] mx-auto h-10 bg-theme rounded-md flex items-center justify-center"
 			>Poslať mail</NuxtLink
 		>
-		<span class="text-gray-300 text-sm my-5 block w-full text-center"
+		<span class="text-gray-300 text-sm my-5 lg:mb-10 block w-full text-center"
 			>alebo si hneď vyberte balík</span
 		>
 
-		<section class="flex flex-col gap-y-16">
+		<section
+			class="flex flex-col lg:flex-row gap-y-16 gap-x-10 max-w-[420px] lg:max-w-[1100px] mx-auto"
+		>
 			<div
 				v-for="product in data"
 				:key="product.name"
-				class="px-5 py-8 border border-gray-400 rounded-lg relative"
+				class="px-5 py-8 border border-gray-400 rounded-lg relative w-full grid grid-rows-[auto_auto_auto_auto_1fr_auto_auto]"
+				:class="{ 'shadow shadow-theme-200': product.mostPopular }"
 			>
 				<div
 					v-if="product.mostPopular"
@@ -128,6 +148,8 @@ const logos: Logo[] = [
 				<p class="text-3xl font-bold text-gray-100">{{ product.price }}</p>
 				<p class="text-xs text-gray-300 font-semibold mb-2">s DPH</p>
 				<p class="text-base text-gray-200">{{ product.description }}</p>
+
+				<div class="h-full"></div>
 
 				<ul class="mt-10 flex flex-col gap-y-3">
 					<li
@@ -152,8 +174,8 @@ const logos: Logo[] = [
 				</ul>
 
 				<button
-					class="w-full h-10 flex items-center justify-center font-medium text-gray-100 bg-dark-200 rounded-md mt-8"
-					:class="{ 'bg-theme text-dark-100': product.mostPopular }"
+					class="w-full h-10 flex items-center justify-center font-medium rounded-md mt-8"
+					:class="[product.mostPopular ? 'bg-theme text-dark-100' : 'text-gray-100 bg-dark-200']"
 				>
 					Vybrať
 				</button>
@@ -161,7 +183,7 @@ const logos: Logo[] = [
 		</section>
 	</section>
 
-	<section id="moja-praca" class="mt-[100px]">
+	<section id="moja-praca" class="mt-[100px] w-full max-w-[420px] md:max-w-full px-5 mx-auto">
 		<h2 class="text-3xl text-gray-100 mb-8">Moja práca</h2>
 
 		<div v-for="logo in logos" :key="logo.title" class="[&:not(&:first-child)]:mt-14">
