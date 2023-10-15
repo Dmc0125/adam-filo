@@ -3,7 +3,7 @@ const isMenuOpen = ref(false);
 </script>
 
 <template>
-	<div class="grid grid-rows-[auto_1fr_auto] min-h-screen bg-dark-100">
+	<div class="grid grid-rows-[auto_1fr_auto] min-h-screen w-full bg-dark-100 overflow-x-hidden">
 		<NavMenu :is-open="isMenuOpen" @close="isMenuOpen = false"></NavMenu>
 
 		<header class="w-full py-8 px-5 flex items-center justify-between text-gray-100">
@@ -16,9 +16,11 @@ const isMenuOpen = ref(false);
 			</nav>
 		</header>
 
-		<slot></slot>
+		<div class="w-full max-w-[420px] md:max-w-full px-5 mx-auto">
+			<slot></slot>
+		</div>
 
-		<footer class="w-full p-5 flex justify-between items-end text-gray-100">
+		<footer class="w-full mt-20 p-5 flex justify-between items-end text-gray-100">
 			<ul class="flex flex-col gap-y-2">
 				<li>
 					<a
@@ -77,5 +79,9 @@ h4,
 h5,
 h6 {
 	font-family: 'DM Serif Display';
+}
+
+html {
+	scroll-behavior: smooth;
 }
 </style>

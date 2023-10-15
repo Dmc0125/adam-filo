@@ -104,11 +104,13 @@ export default defineEventHandler(async (_): Promise<ProductResponseData[]> => {
 					continue;
 				}
 				const { id, name, description, price } = p;
+				const desc = description.replace('<p><span>', '').replace('</span></p>', '');
+
 				responseData.push({
 					mostPopular: key === 'standard',
+					description: desc,
 					id,
 					name,
-					description,
 					price: price.formatted.price,
 					comparisons: comps,
 				});

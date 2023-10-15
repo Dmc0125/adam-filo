@@ -10,10 +10,43 @@ const stats: Stat[] = [
 ];
 
 const { data } = await useFetch('/api/products');
+
+type Logo = {
+	id: string;
+	title: string;
+	description: string;
+};
+
+const logos: Logo[] = [
+	{
+		id: 'tagano',
+		title: 'Tagano',
+		description:
+			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
+	},
+	{
+		id: 'leaf',
+		title: 'Leaf',
+		description:
+			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
+	},
+	{
+		id: 'peterek',
+		title: 'Peterek',
+		description:
+			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
+	},
+	{
+		id: 'dannys',
+		title: "Danny's",
+		description:
+			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
+	},
+];
 </script>
 
 <template>
-	<section id="domov" class="px-5 mt-20">
+	<section id="domov" class="mt-20 w-full">
 		<h1 class="text-gray-100 text-3xl">Vylepšite svoj imidž a urobte pôsobivý prvý dojem</h1>
 		<h2 class="font-[Inter] text-gray-200 text-base mt-5">
 			Volám sa Adam, som profesionálny grafický dizajnér, najmä dizajnér loga s 3 rokmi skúseností
@@ -33,13 +66,13 @@ const { data } = await useFetch('/api/products');
 		</div>
 	</section>
 
-	<section id="o-mne" class="mt-40 px-5 grid">
+	<section id="o-mne" class="mt-40 grid w-full">
 		<h2 class="text-gray-100 text-3xl mb-4">O mne</h2>
 
 		<img
 			src="/portrait.png"
 			alt="Portrét"
-			class="rounded-md border border-gray-400"
+			class="rounded-md border border-gray-400 w-full"
 			loading="lazy"
 		/>
 
@@ -57,7 +90,7 @@ const { data } = await useFetch('/api/products');
 		</ul>
 	</section>
 
-	<section id="cennik" class="mt-[100px] px-5">
+	<section id="cennik" class="mt-[100px]">
 		<h2 class="text-3xl text-gray-100">Cenník</h2>
 		<p class="text-base text-gray-200 mt-4">
 			Rád Vám pomôžem vytvoriť unikátne, moderné a profesionálne logo, keďže proces tvorby loga je o
@@ -94,7 +127,7 @@ const { data } = await useFetch('/api/products');
 				</h3>
 				<p class="text-3xl font-bold text-gray-100">{{ product.price }}</p>
 				<p class="text-xs text-gray-300 font-semibold mb-2">s DPH</p>
-				<p class="text-base text-gray-200" v-html="product.description"></p>
+				<p class="text-base text-gray-200">{{ product.description }}</p>
 
 				<ul class="mt-10 flex flex-col gap-y-3">
 					<li
@@ -127,4 +160,28 @@ const { data } = await useFetch('/api/products');
 			</div>
 		</section>
 	</section>
+
+	<section id="moja-praca" class="mt-[100px]">
+		<h2 class="text-3xl text-gray-100 mb-8">Moja práca</h2>
+
+		<div v-for="logo in logos" :key="logo.title" class="[&:not(&:first-child)]:mt-14">
+			<img
+				:src="`/logos/${logo.id}.png`"
+				:alt="`${logo.title} logo`"
+				class="w-full rounded-lg border border-gray-400"
+				loading="lazy"
+			/>
+
+			<div class="w-full flex items-center justify-between mt-5">
+				<h3 class="text-2xl text-gray-100">{{ logo.title }}</h3>
+				<NuxtLink :href="`/${logo.id}`" class="text-gray-200 text-sm font-medium flex items-center">
+					Vidieť viac
+					<IconsArrow class="w-5 h-5 ml-2"></IconsArrow>
+				</NuxtLink>
+			</div>
+			<p class="w-full mt-5 text-gray-200">{{ logo.description }}</p>
+		</div>
+	</section>
+
+	<Testimonials />
 </template>

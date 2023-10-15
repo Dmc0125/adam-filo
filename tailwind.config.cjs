@@ -19,6 +19,8 @@ export default {
 			'gray-400': '#39333E',
 			theme: '#FF8125',
 			'theme-200': '#36200F',
+			star: '#FFB900',
+			green: '#39FF71',
 		},
 	},
 	plugins: [],
