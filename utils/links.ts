@@ -6,7 +6,6 @@ export type Link = {
 export const links: Link[] = [
 	{
 		name: 'Domov',
-
 		url: '/',
 	},
 	{
@@ -15,14 +14,14 @@ export const links: Link[] = [
 	},
 	{
 		name: 'Cenník',
-		url: '/#pricing',
+		url: '/#cennik',
 	},
 	{
 		name: 'Moja práca',
-		url: '/#my-work',
+		url: '/#moja-praca',
 	},
 	{
 		name: 'Hodnotenia',
-		url: '/#testimonials',
+		url: '/#hodnotenia',
 	},
 ];

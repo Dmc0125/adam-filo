@@ -18,7 +18,7 @@ const route = useRoute();
 			<IconsClose></IconsClose>
 		</button>
 
-		<nav class="absolute top-1/2 -translate-y-1/2 ml-[15%]">
+		<nav class="absolute top-1/2 -translate-y-1/2 ml-[15%]" @click="$emit('close')">
 			<ul class="flex flex-col gap-y-10">
 				<li v-for="link in links" :key="link.url">
 					<NuxtLink

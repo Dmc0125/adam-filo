@@ -4,7 +4,7 @@ const isMenuOpen = ref(false);
 
 <template>
 	<div class="grid grid-rows-[auto_1fr_auto] min-h-screen bg-dark-100">
-		<NavMenu @close="isMenuOpen = false" :is-open="isMenuOpen"></NavMenu>
+		<NavMenu :is-open="isMenuOpen" @close="isMenuOpen = false"></NavMenu>
 
 		<header class="w-full py-8 px-5 flex items-center justify-between text-gray-100">
 			<h1 class="font-[Inter] font-semibold text-2xl">Adam Filo</h1>
