@@ -54,7 +54,7 @@ const logos: Logo[] = [
 </script>
 
 <template>
-	<section id="domov" class="mt-20 w-full max-w-[420px] sm:max-w-[1100px] px-5 xl:px-0 mx-auto">
+	<section id="domov" class="mt-[25vh] w-full max-w-[420px] sm:max-w-[1100px] px-5 xl:px-0 mx-auto">
 		<h1 class="text-gray-100 text-3xl sm:text-5xl md:text-6xl !leading-[135%]">
 			Vylepšite svoj imidž a urobte pôsobivý prvý dojem
 		</h1>
@@ -78,7 +78,7 @@ const logos: Logo[] = [
 
 	<section
 		id="o-mne"
-		class="mt-40 grid sm:gap-x-16 md:gap-x-20 sm:grid-rows-[min-content_1fr_auto] sm:grid-cols-2 w-full max-w-[420px] sm:max-w-[660px] px-5 md:px-0 mx-auto"
+		class="mt-40 sm:mt-60 md:mt-[320px] grid sm:gap-x-16 md:gap-x-20 sm:grid-rows-[min-content_1fr_auto] sm:grid-cols-2 w-full max-w-[420px] sm:max-w-[660px] px-5 md:px-0 mx-auto scroll-mt-[70px]"
 	>
 		<h2 class="text-gray-100 text-3xl mb-4 sm:col-[2/3]">O mne</h2>
 
@@ -111,7 +111,7 @@ const logos: Logo[] = [
 
 	<section
 		id="cennik"
-		class="mt-[100px] w-full max-w-[420px] sm:max-w-[660px] lg:max-w-[1100px] px-5 md:px-0 lg:px-5 xl:px-0 mx-auto"
+		class="mt-[100px] sm:mt-60 w-full max-w-[420px] sm:max-w-[660px] lg:max-w-[1100px] px-5 md:px-0 lg:px-5 xl:px-0 mx-auto scroll-mt-[70px]"
 	>
 		<h2 class="text-3xl text-gray-100">Cenník</h2>
 		<p class="text-base text-gray-200 mt-4">
@@ -134,7 +134,7 @@ const logos: Logo[] = [
 			<div
 				v-for="product in data"
 				:key="product.name"
-				class="px-5 py-8 border border-gray-400 rounded-lg relative w-full grid grid-rows-[auto_auto_auto_auto_1fr_auto_auto]"
+				class="px-5 py-8 border border-gray-400 rounded-lg relative z-0 w-full grid grid-rows-[auto_auto_auto_auto_1fr_auto_auto]"
 				:class="{ 'shadow shadow-theme-200': product.mostPopular }"
 			>
 				<div
@@ -188,7 +188,7 @@ const logos: Logo[] = [
 		</section>
 	</section>
 
-	<section id="moja-praca" class="mt-[100px] w-full px-5 mx-auto">
+	<section id="moja-praca" class="mt-[100px] sm:mt-60 w-full px-5 mx-auto scroll-mt-[70px]">
 		<h2
 			class="w-full max-w-[420px] md:max-w-[800px] xl:max-w-[1100px] mx-auto block text-3xl text-gray-100 mb-8"
 		>

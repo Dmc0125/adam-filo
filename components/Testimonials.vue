@@ -40,12 +40,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<section class="max-w-[420px] md:max-w-full sm:px-0 md:px-5 mx-auto w-full">
+	<section
+		id="hodnotenia"
+		class="max-w-[420px] md:max-w-full sm:px-0 md:px-5 mx-auto w-full mt-[100px] sm:mt-60 scroll-mt-[70px]"
+	>
 		<div
 			v-if="data"
-			id="hodnotenia"
 			ref="wrapperRef"
-			class="mt-[100px] max-w-[calc(100vw-40px)] md:max-w-[800px] md:w-full mx-auto xl:max-w-[1100px]"
+			class="max-w-[calc(100vw-40px)] md:max-w-[800px] md:w-full mx-auto xl:max-w-[1100px]"
 		>
 			<h2 class="text-3xl text-gray-100 mb-8">Hodnotenia</h2>
 
