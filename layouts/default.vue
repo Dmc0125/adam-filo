@@ -1,15 +1,42 @@
 <script lang="ts" setup>
+import Mail from '@/components/icons/Mail.vue';
+import Instagram from '@/components/icons/Instagram.vue';
+
 const isMenuOpen = ref(false);
+
+type Social = {
+	url: string;
+	icon: typeof Mail;
+};
+
+const socials: Social[] = [
+	{ url: 'mailto:kontakt@adamfilo.com', icon: Mail },
+	{ url: 'https://instagram.com/adam_filo_', icon: Instagram },
+];
+
+const route = useRoute();
 </script>
 
 <template>
 	<div class="grid grid-rows-[auto_1fr_auto] min-h-screen w-full bg-dark-100 overflow-x-hidden">
-		<NavMenu :is-open="isMenuOpen" @close="isMenuOpen = false"></NavMenu>
-
-		<header class="w-full py-8 px-5 flex items-center justify-between text-gray-100">
+		<header
+			class="w-full py-8 px-5 xl:px-[clamp(1.25rem,10%,100px)] flex items-center justify-between text-gray-100"
+		>
 			<h1 class="font-[Inter] font-semibold text-2xl">Adam Filo</h1>
 
-			<nav>
+			<nav class="flex gap-x-6">
+				<NavMenu :is-open="isMenuOpen" @close="isMenuOpen = false"></NavMenu>
+				<a
+					v-for="social in socials"
+					:key="social.url"
+					:href="social.url"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="hidden md:block"
+				>
+					<component :is="social.icon" class="w-10 h-10 p-1"></component>
+				</a>
+
 				<button class="w-10 h-10 p-1" @click="isMenuOpen = !isMenuOpen">
 					<IconsMenu class="w-full h-full"></IconsMenu>
 				</button>
@@ -18,34 +45,31 @@ const isMenuOpen = ref(false);
 
 		<slot></slot>
 
-		<footer class="w-full mt-20 p-5 flex justify-between items-end text-gray-100">
-			<ul class="flex flex-col gap-y-2">
-				<li>
+		<footer
+			class="w-full mt-20 p-5 xl:px-[clamp(1.25rem,10%,100px)] flex justify-between items-end sm:items-center text-gray-100"
+		>
+			<ul class="flex flex-col sm:flex-row gap-y-2 gap-x-4">
+				<li v-for="social in socials" :key="social.url">
 					<a
-						href="https://instagram.com/adamfilo"
+						:href="social.url"
 						target="_blank"
 						rel="noopener noreferrer"
 						class="w-10 h-10 p-1 block"
 					>
-						<IconsMail class="w-full h-full"></IconsMail>
-					</a>
-				</li>
-				<li>
-					<a
-						href="mailto:kontakt@adamfilo.com"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="w-10 h-10 p-1 block"
-					>
-						<IconsInstagram class="w-full h-full"></IconsInstagram>
+						<component :is="social.icon" class="w-10 h-10 p-1"></component>
 					</a>
 				</li>
 			</ul>
 
 			<nav>
-				<ul class="flex flex-col gap-y-2">
+				<ul class="flex flex-col sm:flex-row gap-y-2 gap-x-6">
 					<li v-for="link in links" :key="link.url">
-						<NuxtLink :to="link.url" class="text-sm">{{ link.name }}</NuxtLink>
+						<NuxtLink
+							:to="link.url"
+							class="text-sm md:text-base"
+							:class="{ 'text-theme': route.fullPath == link.url }"
+							>{{ link.name }}</NuxtLink
+						>
 					</li>
 				</ul>
 			</nav>

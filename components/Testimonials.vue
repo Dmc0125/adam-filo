@@ -40,12 +40,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<section class="max-w-[420px] md:max-w-full px-5 sm:px-0 md:px-5 mx-auto w-full">
+	<section class="max-w-[420px] md:max-w-full sm:px-0 md:px-5 mx-auto w-full">
 		<div
 			v-if="data"
 			id="hodnotenia"
 			ref="wrapperRef"
-			class="mt-[100px] max-w-[calc(100vw-40px)] md:max-w-[800px] md:w-full md:mx-auto xl:max-w-[1100px]"
+			class="mt-[100px] max-w-[calc(100vw-40px)] md:max-w-[800px] md:w-full mx-auto xl:max-w-[1100px]"
 		>
 			<h2 class="text-3xl text-gray-100 mb-8">Hodnotenia</h2>
 
@@ -53,13 +53,13 @@ onUnmounted(() => {
 				<div
 					class="flex gap-x-10 transition-all"
 					:style="{
-						transform: `translateX(-${((wrapperWidth || 0) + 40) * (activeSlide - 1)}px)`,
+						transform: `translateX(-${(wrapperWidth + 40 || 0) * (activeSlide - 1)}px)`,
 					}"
 				>
 					<div
 						v-for="(chunk, i) in chunksOfThree"
 						:key="i"
-						class="flex flex-col flex-shrink-0 gap-y-10 max-w-[380px] w-[calc(100vw-40px)]"
+						class="flex flex-col flex-shrink-0 gap-y-10 max-w-[420px] w-[calc(100vw-40px)]"
 					>
 						<Testimonial
 							v-for="(testimonial, j) in chunk"
