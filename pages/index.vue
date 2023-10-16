@@ -18,6 +18,7 @@ type Logo = {
 	id: string;
 	title: string;
 	description: string;
+	span: string;
 };
 
 const logos: Logo[] = [
@@ -26,30 +27,34 @@ const logos: Logo[] = [
 		title: 'Tagano',
 		description:
 			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
+		span: 'col-[1/2]',
 	},
 	{
 		id: 'leaf',
 		title: 'Leaf',
 		description:
 			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
+		span: 'col-[2/4]',
 	},
 	{
 		id: 'peterek',
 		title: 'Peterek',
 		description:
 			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
+		span: 'col-[1/3]',
 	},
 	{
 		id: 'dannys',
 		title: "Danny's",
 		description:
 			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
+		span: 'col-[3/4]',
 	},
 ];
 </script>
 
 <template>
-	<section id="domov" class="mt-20 w-full max-w-[1100px] px-5 mx-auto">
+	<section id="domov" class="mt-20 w-full max-w-[420px] sm:max-w-[1100px] px-5 xl:px-0 mx-auto">
 		<h1 class="text-gray-100 text-3xl sm:text-5xl md:text-6xl !leading-[135%]">
 			Vylepšite svoj imidž a urobte pôsobivý prvý dojem
 		</h1>
@@ -183,25 +188,41 @@ const logos: Logo[] = [
 		</section>
 	</section>
 
-	<section id="moja-praca" class="mt-[100px] w-full max-w-[420px] md:max-w-full px-5 mx-auto">
-		<h2 class="text-3xl text-gray-100 mb-8">Moja práca</h2>
+	<section id="moja-praca" class="mt-[100px] w-full px-5 mx-auto">
+		<h2
+			class="w-full max-w-[420px] md:max-w-[800px] xl:max-w-[1100px] mx-auto block text-3xl text-gray-100 mb-8"
+		>
+			Moja práca
+		</h2>
 
-		<div v-for="logo in logos" :key="logo.title" class="[&:not(&:first-child)]:mt-14">
-			<img
-				:src="`/logos/${logo.id}.png`"
-				:alt="`${logo.title} logo`"
-				class="w-full rounded-lg border border-gray-400"
-				loading="lazy"
-			/>
+		<div
+			class="w-full max-w-[420px] md:max-w-[800px] xl:max-w-[1100px] mx-auto md:grid grid-cols-[1fr_10%_1fr] grid-rows-[1fr_1fr] gap-x-10 xl:gap-x-16 gap-y-12 xl:gap-y-20"
+		>
+			<div
+				v-for="logo in logos"
+				:key="logo.title"
+				class="[&:not(&:first-child)]:mt-14 md:!mt-0"
+				:class="[logo.span]"
+			>
+				<img
+					:src="`/logos/${logo.id}.png`"
+					:alt="`${logo.title} logo`"
+					class="w-full rounded-lg border border-gray-400"
+					loading="lazy"
+				/>
 
-			<div class="w-full flex items-center justify-between mt-5">
-				<h3 class="text-2xl text-gray-100">{{ logo.title }}</h3>
-				<NuxtLink :href="`/${logo.id}`" class="text-gray-200 text-sm font-medium flex items-center">
-					Vidieť viac
-					<IconsArrow class="w-5 h-5 ml-2"></IconsArrow>
-				</NuxtLink>
+				<div class="w-full flex items-center justify-between mt-5">
+					<h3 class="text-2xl text-gray-100">{{ logo.title }}</h3>
+					<NuxtLink
+						:href="`/${logo.id}`"
+						class="text-gray-200 text-sm font-medium flex items-center"
+					>
+						Vidieť viac
+						<IconsArrow class="w-5 h-5 ml-2"></IconsArrow>
+					</NuxtLink>
+				</div>
+				<p class="w-full mt-5 text-gray-200">{{ logo.description }}</p>
 			</div>
-			<p class="w-full mt-5 text-gray-200">{{ logo.description }}</p>
 		</div>
 	</section>
 

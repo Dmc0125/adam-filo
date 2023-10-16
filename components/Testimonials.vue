@@ -40,7 +40,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<section class="max-w-[420px] md:max-w-full px-5 mx-auto w-full">
+	<section class="max-w-[420px] md:max-w-full px-5 sm:px-0 md:px-5 mx-auto w-full">
 		<div
 			v-if="data"
 			id="hodnotenia"
