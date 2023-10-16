@@ -215,10 +215,12 @@ const logos: Logo[] = [
 					<h3 class="text-2xl text-gray-100">{{ logo.title }}</h3>
 					<NuxtLink
 						:href="`/${logo.id}`"
-						class="text-gray-200 text-sm font-medium flex items-center"
+						class="see-more text-gray-200 text-sm font-medium flex items-center border border-dark-100 rounded-md sm:px-5 sm:py-2 sm:hover:bg-dark-300 sm:hover:border-gray-400 sm:hover:text-theme transition-all"
 					>
 						Vidieť viac
-						<IconsArrow class="w-5 h-5 ml-2"></IconsArrow>
+						<IconsArrow
+							class="w-5 h-5 ml-2 transition-all sm:group-hover:translate-x-[.5rem]"
+						></IconsArrow>
 					</NuxtLink>
 				</div>
 				<p class="w-full mt-5 text-gray-200">{{ logo.description }}</p>
@@ -228,3 +230,9 @@ const logos: Logo[] = [
 
 	<Testimonials />
 </template>
+
+<style scoped lang="postcss">
+.see-more:hover svg {
+	@apply translate-x-1;
+}
+</style>

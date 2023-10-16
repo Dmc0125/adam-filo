@@ -25,18 +25,25 @@ const route = useRoute();
 		</div>
 
 		<nav
-			class="absolute top-1/2 -translate-y-1/2 ml-[15%] lg:ml-[25%] overflow-y-auto"
+			class="w-1/2 absolute top-1/2 -translate-y-1/2 ml-[15%] lg:ml-[25%] overflow-y-auto"
 			@click="$emit('close')"
 		>
-			<ul class="flex flex-col gap-y-10 xl:gap-y-16">
-				<li v-for="link in links" :key="link.url">
+			<ul class="w-full flex flex-col gap-y-5 xl:gap-y-16">
+				<li
+					v-for="link in links"
+					:key="link.url"
+					class="link w-full flex items-center justify-between"
+				>
 					<NuxtLink
 						:href="link.url"
 						style="font-family: 'DM Serif Display'"
-						class="text-gray-100 text-3xl lg:text-4xl xl:text-6xl"
+						class="text-gray-100 text-3xl lg:text-4xl xl:text-6xl hover:text-theme"
 						:class="{ 'text-theme': route.fullPath == link.url }"
 						>{{ link.name }}</NuxtLink
 					>
+					<IconsArrow
+						class="hidden sm:block h-10 lg:h-14 xl:h-16 aspect-square opacity-0 text-dark-100 transition-all -translate-x-2"
+					></IconsArrow>
 				</li>
 			</ul>
 			<ul class="mt-10 lg:mt-12 xl:mt-16 flex items-center gap-x-10 text-gray-100">
@@ -64,3 +71,9 @@ const route = useRoute();
 		</nav>
 	</div>
 </template>
+
+<style scoped lang="postcss">
+.link:hover svg {
+	@apply text-theme opacity-100 translate-x-0;
+}
+</style>
