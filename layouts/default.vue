@@ -81,7 +81,7 @@ onUnmounted(() => {
 					<li v-for="link in links" :key="link.url">
 						<NuxtLink
 							:to="link.url"
-							class="text-sm md:text-base"
+							class="text-sm md:text-base hover:text-theme"
 							:class="{ 'text-theme': route.fullPath == link.url }"
 							>{{ link.name }}</NuxtLink
 						>
