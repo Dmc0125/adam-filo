@@ -8,16 +8,31 @@ defineProps<Props>();
 type Emits = {
 	(e: 'close'): void;
 };
-defineEmits<Emits>();
+const emits = defineEmits<Emits>();
 
 const route = useRoute();
+
+watch(
+	() => route.fullPath,
+	() => {
+		console.log(route.fullPath);
+		console.log('hello');
+		emits('close');
+	},
+);
+
+function closeOnClick(url: string) {
+	if (url.includes('#')) {
+		emits('close');
+	}
+}
 </script>
 
 <template>
 	<Transition name="menu">
-		<div v-if="isOpen" class="fixed z-50 inset-0 bg-dark-100 overflow-auto">
+		<div v-if="isOpen" class="fixed z-50 inset-0 bg-dark-100 overflow-auto flex items-center">
 			<div
-				class="w-full h-[100px] flex items-center justify-end pr-5 xl:pr-[clamp(1.25rem,10%,100px)]"
+				class="absolute top-0 h-[100px] flex items-center justify-end right-5 xl:right-[clamp(1.25rem,10%,100px)]"
 				:class="{ 'h-[70px]': isScrolled }"
 			>
 				<button class="w-10 h-10 text-gray-200 p-1" @click="$emit('close')">
@@ -25,10 +40,7 @@ const route = useRoute();
 				</button>
 			</div>
 
-			<nav
-				class="w-1/2 absolute top-1/2 -translate-y-1/2 ml-[15%] lg:ml-[25%] overflow-y-auto"
-				@click="$emit('close')"
-			>
+			<nav class="w-1/2 h-fit ml-[15%]">
 				<TransitionGroup
 					appear
 					tag="ul"
@@ -40,6 +52,7 @@ const route = useRoute();
 						:key="link.url"
 						class="w-full"
 						:style="{ 'transition-delay': `${(i + 1) * 150}ms` }"
+						@click="closeOnClick(link.url)"
 					>
 						<NuxtLink
 							:href="link.url"
@@ -86,7 +99,18 @@ const route = useRoute();
 </template>
 
 <style scoped lang="postcss">
-.link:hover svg {
+@media (max-height: 400px) {
+	nav {
+		@apply mt-10;
+	}
+}
+
+.link:focus {
+	@apply ring-0 text-theme;
+}
+
+.link:hover svg,
+.link:focus svg {
 	@apply text-theme opacity-100 translate-x-0;
 }
 

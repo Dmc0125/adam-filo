@@ -86,6 +86,9 @@ export default defineEventHandler(async (_): Promise<ProductResponseData[]> => {
 		});
 		if (!res.ok) {
 			console.log(res);
+			try {
+				console.log(await res.json());
+			} catch (_) {}
 			throw createError({
 				statusCode: 500,
 				statusMessage: 'Unknown server error',

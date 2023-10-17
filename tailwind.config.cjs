@@ -21,6 +21,7 @@ export default {
 			'theme-200': '#36200F',
 			star: '#FFB900',
 			green: '#39FF71',
+			error: '#FF2424',
 		},
 	},
 	plugins: [],

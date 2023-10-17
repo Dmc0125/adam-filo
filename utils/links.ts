@@ -10,7 +10,7 @@ export const links: Link[] = [
 	},
 	{
 		name: 'Kontakt',
-		url: '/kontakt',
+		url: '/contact',
 	},
 	{
 		name: 'Cenník',

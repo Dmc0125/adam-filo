@@ -64,7 +64,7 @@ const logos: Logo[] = [
 		</h2>
 		<div class="flex flex-col sm:flex-row gap-x-10 gap-y-5 mt-8 font-medium">
 			<NuxtLink
-				href="/kontakt"
+				href="/contact"
 				class="w-full sm:w-[200px] md:w-[290px] h-14 bg-theme text-dark-100 rounded-md text-xl flex items-center justify-center"
 				>Kontaktuje ma</NuxtLink
 			>
@@ -120,7 +120,7 @@ const logos: Logo[] = [
 		</p>
 
 		<NuxtLink
-			href="/kontakt"
+			href="/contact"
 			class="mt-5 w-full max-w-[200px] mx-auto h-10 bg-theme rounded-md flex items-center justify-center"
 			>Poslať mail</NuxtLink
 		>

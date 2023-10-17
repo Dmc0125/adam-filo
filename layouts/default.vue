@@ -32,7 +32,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="grid grid-rows-[auto_1fr_auto] min-h-screen w-full bg-dark-100 overflow-x-hidden">
+	<div class="grid grid-rows-[1fr_auto] min-h-screen w-full bg-dark-100 overflow-x-hidden">
 		<NavMenu :is-scrolled="isScrolled" :is-open="isMenuOpen" @close="isMenuOpen = false"></NavMenu>
 		<header
 			class="fixed z-10 w-full h-[100px] px-5 xl:px-[clamp(1.25rem,10%,100px)] flex items-center justify-between text-gray-100 transition-all border border-dark-100"
@@ -71,7 +71,7 @@ onUnmounted(() => {
 						rel="noopener noreferrer"
 						class="w-10 h-10 p-1 block"
 					>
-						<component :is="social.icon" class="w-10 h-10 p-1"></component>
+						<component :is="social.icon" class="h-full aspect-square"></component>
 					</a>
 				</li>
 			</ul>
@@ -109,6 +109,10 @@ onUnmounted(() => {
 	font-family: 'Inter';
 }
 
+*:focus {
+	outline: none;
+}
+
 h1,
 h2,
 h3,
@@ -120,5 +124,11 @@ h6 {
 
 html {
 	scroll-behavior: smooth;
+}
+</style>
+
+<style lang="postcss">
+*:focus {
+	@apply ring-2 ring-theme ring-offset-2 ring-offset-dark-100;
 }
 </style>
