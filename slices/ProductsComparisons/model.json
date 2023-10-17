@@ -1,0 +1,83 @@
+{
+  "id": "products_comparisons",
+  "type": "SharedSlice",
+  "name": "ProductsComparisons",
+  "description": "ProductsComparisons",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "productId": {
+          "type": "Text",
+          "config": {
+            "label": "productId",
+            "placeholder": ""
+          }
+        },
+        "designs": {
+          "type": "Number",
+          "config": {
+            "label": "designs",
+            "placeholder": ""
+          }
+        },
+        "revisions": {
+          "type": "Number",
+          "config": {
+            "label": "revisions",
+            "placeholder": ""
+          }
+        },
+        "highres": {
+          "type": "Boolean",
+          "config": {
+            "label": "highRes",
+            "default_value": false,
+            "placeholder_true": "true",
+            "placeholder_false": "false"
+          }
+        },
+        "3dMockup": {
+          "type": "Boolean",
+          "config": {
+            "label": "3dmockup",
+            "placeholder_false": "false",
+            "placeholder_true": "true",
+            "default_value": false
+          }
+        },
+        "sourcedata": {
+          "type": "Boolean",
+          "config": {
+            "label": "sourceData",
+            "default_value": false,
+            "placeholder_true": "true",
+            "placeholder_false": "false"
+          }
+        },
+        "fbPic": {
+          "type": "Boolean",
+          "config": {
+            "label": "fbPic",
+            "placeholder_false": "false",
+            "placeholder_true": "true",
+            "default_value": false
+          }
+        },
+        "deliveryTime": {
+          "type": "Number",
+          "config": {
+            "label": "deliveryTime",
+            "placeholder": ""
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

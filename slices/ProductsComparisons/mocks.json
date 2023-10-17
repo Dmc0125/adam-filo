@@ -1,0 +1,45 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"designs": {
+				"__TYPE__": "FieldContent",
+				"value": "48",
+				"type": "Number"
+			},
+			"revisions": {
+				"__TYPE__": "FieldContent",
+				"value": "88",
+				"type": "Number"
+			},
+			"highres": {
+				"__TYPE__": "BooleanContent",
+				"value": false
+			},
+			"sourcedata": {
+				"__TYPE__": "BooleanContent",
+				"value": true
+			},
+			"productId": {
+				"__TYPE__": "FieldContent",
+				"value": "step",
+				"type": "Text"
+			},
+			"3dMockup": {
+				"__TYPE__": "BooleanContent",
+				"value": false
+			},
+			"fbPic": {
+				"__TYPE__": "BooleanContent",
+				"value": false
+			},
+			"deliveryTime": {
+				"__TYPE__": "FieldContent",
+				"value": "64",
+				"type": "Number"
+			}
+		},
+		"items": []
+	}
+]

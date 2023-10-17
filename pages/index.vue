@@ -14,43 +14,82 @@ const stats: (Stat | { isDivider: true })[] = [
 
 const { data } = await useFetch('/api/products');
 
+type LogoSize = 'lg' | 'sm';
+type LogoPosition = 'left' | 'right';
+
 type Logo = {
-	id: string;
 	title: string;
+	id: string;
 	description: string;
 	span: string;
+	imgUrl: string;
+	imgAlt: string;
 };
 
-const logos: Logo[] = [
-	{
-		id: 'tagano',
-		title: 'Tagano',
-		description:
-			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
-		span: 'col-[1/2]',
-	},
-	{
-		id: 'leaf',
-		title: 'Leaf',
-		description:
-			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
-		span: 'col-[2/4]',
-	},
-	{
-		id: 'peterek',
-		title: 'Peterek',
-		description:
-			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
-		span: 'col-[1/3]',
-	},
-	{
-		id: 'dannys',
-		title: "Danny's",
-		description:
-			'Ut sit ut sit maiores enim quibusdam. Perspiciatis ex minus adipisci voluptas alias.',
-		span: 'col-[3/4]',
-	},
-];
+function getLogoSpan(size: LogoSize, position: LogoPosition): string {
+	if (size === 'lg' && position === 'left') {
+		return '1/3';
+	} else if (size === 'lg' && position === 'right') {
+		return '2/4';
+	} else if (size === 'sm' && position === 'left') {
+		return '1/2';
+	}
+	return '3/4';
+}
+
+type ProductComparison = {
+	designs: number;
+	revisions: number;
+	highRes: boolean | null;
+	sourceData: boolean | null;
+	fbPic: boolean | null;
+	deliveryTime: number;
+	mockup: boolean | null;
+};
+
+const { client } = usePrismic();
+const { data: prismicData } = useAsyncData('logos', async () => {
+	const res = await client.getByType('landing');
+	if (!res) {
+		return null;
+	}
+	const { slices } = res.results[0].data;
+
+	const _logos: Logo[] = [];
+	const productsComparisons: Record<string, ProductComparison> = {};
+
+	slices.forEach((slice) => {
+		switch (slice.slice_type) {
+			case 'logo': {
+				_logos.push({
+					title: slice.primary.title!,
+					id: slice.primary.detailsid!,
+					description: slice.primary.description!,
+					span: getLogoSpan(slice.primary.size as LogoSize, slice.primary.position as LogoPosition),
+					imgAlt: slice.primary.img.alt!,
+					imgUrl: slice.primary.img.url!,
+				});
+				break;
+			}
+			case 'products_comparisons': {
+				productsComparisons[slice.primary.productId!] = {
+					designs: slice.primary.designs!,
+					revisions: slice.primary.revisions!,
+					highRes: slice.primary.highres,
+					sourceData: slice.primary.sourcedata,
+					fbPic: slice.primary.fbPic,
+					deliveryTime: slice.primary.deliveryTime!,
+					mockup: slice.primary['3dMockup'],
+				};
+			}
+		}
+	});
+
+	return {
+		logos: _logos,
+		productsComparisons,
+	};
+});
 </script>
 
 <template>
@@ -188,7 +227,11 @@ const logos: Logo[] = [
 		</section>
 	</section>
 
-	<section id="moja-praca" class="mt-[100px] sm:mt-60 w-full px-5 mx-auto scroll-mt-[70px]">
+	<section
+		v-if="prismicData"
+		id="moja-praca"
+		class="mt-[100px] sm:mt-60 w-full px-5 mx-auto scroll-mt-[70px]"
+	>
 		<h2
 			class="w-full max-w-[420px] md:max-w-[800px] xl:max-w-[1100px] mx-auto block text-3xl text-gray-100 mb-8"
 		>
@@ -199,14 +242,15 @@ const logos: Logo[] = [
 			class="w-full max-w-[420px] md:max-w-[800px] xl:max-w-[1100px] mx-auto md:grid grid-cols-[1fr_10%_1fr] grid-rows-[1fr_1fr] gap-x-10 xl:gap-x-16 gap-y-12 xl:gap-y-20"
 		>
 			<div
-				v-for="logo in logos"
+				v-for="logo in prismicData.logos"
 				:key="logo.title"
 				class="[&:not(&:first-child)]:mt-14 md:!mt-0"
+				:style="{ 'grid-column': logo.span }"
 				:class="[logo.span]"
 			>
 				<img
-					:src="`/logos/${logo.id}.png`"
-					:alt="`${logo.title} logo`"
+					:src="logo.imgUrl"
+					:alt="logo.imgAlt"
 					class="w-full rounded-lg border border-gray-400"
 					loading="lazy"
 				/>
