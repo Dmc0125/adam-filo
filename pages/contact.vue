@@ -1,6 +1,25 @@
 <script lang="ts" setup>
 import emailjs from '@emailjs/browser';
 
+useSeoMeta({
+	title: 'Adam Filo | Kontakt',
+});
+
+useServerSeoMeta({
+	ogTitle: 'Adam Filo | Kontakt',
+	description: 'Vylepšite svoj imidž a urobte pôsobivý prvý dojem',
+	ogDescription: 'Vylepšite svoj imidž a urobte pôsobivý prvý dojem',
+	ogSiteName: 'Adam Filo | Kontakt',
+	ogType: 'website',
+	ogUrl: '',
+	ogImage: '',
+	themeColor: '#FF8125',
+	ogLocale: 'sk_SK',
+	twitterCard: 'summary_large_image',
+	twitterTitle: 'Adam Filo | Kontakt',
+	twitterDescription: 'Vylepšite svoj imidž a urobte pôsobivý prvý dojem',
+});
+
 const runtimeConfig = useRuntimeConfig();
 
 const name = ref('');

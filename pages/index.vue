@@ -1,4 +1,23 @@
 <script setup lang="ts">
+useSeoMeta({
+	title: 'Adam Filo',
+});
+
+useServerSeoMeta({
+	ogTitle: 'Adam Filo',
+	description: 'Vylepšite svoj imidž a urobte pôsobivý prvý dojem',
+	ogDescription: 'Vylepšite svoj imidž a urobte pôsobivý prvý dojem',
+	ogSiteName: 'Adam Filo',
+	ogType: 'website',
+	ogUrl: '',
+	ogImage: '',
+	themeColor: '#FF8125',
+	ogLocale: 'sk_SK',
+	twitterCard: 'summary_large_image',
+	twitterTitle: 'Adam Filo',
+	twitterDescription: 'Vylepšite svoj imidž a urobte pôsobivý prvý dojem',
+});
+
 type Stat = {
 	isDivider: false;
 	data: string;
