@@ -63,7 +63,7 @@ onUnmounted(() => {
 		<footer
 			class="w-full mt-20 md:mt-52 p-5 xl:px-[clamp(1.25rem,10%,100px)] flex justify-between items-end sm:items-center text-gray-100"
 		>
-			<ul class="flex flex-col sm:flex-row gap-y-2 gap-x-4">
+			<ul class="flex gap-x-2 sm:gap-x-4">
 				<li v-for="social in socials" :key="social.url">
 					<a
 						:href="social.url"
@@ -76,8 +76,8 @@ onUnmounted(() => {
 				</li>
 			</ul>
 
-			<nav>
-				<ul class="flex flex-col sm:flex-row gap-y-2 gap-x-6">
+			<nav class="w-full max-w-[200px] sm:max-w-full">
+				<ul class="flex gap-y-2 gap-x-6 flex-wrap items-end justify-end">
 					<li v-for="link in links" :key="link.url">
 						<NuxtLink
 							:to="link.url"

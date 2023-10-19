@@ -12,7 +12,7 @@ const stats: (Stat | { isDivider: true })[] = [
 	{ isDivider: false, data: '100%', name: 'Kvalita komunikácie' },
 ];
 
-const { data } = await useFetch('/api/products');
+const { data: products } = await useFetch('/api/products');
 
 type LogoSize = 'lg' | 'sm';
 type LogoPosition = 'left' | 'right';
@@ -38,13 +38,13 @@ function getLogoSpan(size: LogoSize, position: LogoPosition): string {
 }
 
 type ProductComparison = {
-	designs: number;
-	revisions: number;
-	highRes: boolean | null;
-	sourceData: boolean | null;
-	fbPic: boolean | null;
-	deliveryTime: number;
-	mockup: boolean | null;
+	designs: [string, number];
+	revisions: [string, number];
+	highRes: [string, boolean | null];
+	sourceData: [string, boolean | null];
+	fbPic: [string, boolean | null];
+	deliveryTime: [string, number];
+	mockup: [string, boolean | null];
 };
 
 const { client } = usePrismic();
@@ -73,13 +73,13 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 			}
 			case 'products_comparisons': {
 				productsComparisons[slice.primary.productId!] = {
-					designs: slice.primary.designs!,
-					revisions: slice.primary.revisions!,
-					highRes: slice.primary.highres,
-					sourceData: slice.primary.sourcedata,
-					fbPic: slice.primary.fbPic,
-					deliveryTime: slice.primary.deliveryTime!,
-					mockup: slice.primary['3dMockup'],
+					designs: ['Počet návrhov', slice.primary.designs!],
+					revisions: ['Počet revízií', slice.primary.revisions!],
+					highRes: ['Vysoké rozlíšenie', slice.primary.highres],
+					mockup: ['3D Mockup', slice.primary['3dMockup']],
+					sourceData: ['Zdrojové dáta', slice.primary.sourcedata],
+					fbPic: ['FB Profilovka', slice.primary.fbPic],
+					deliveryTime: ['Dĺžka dodania', slice.primary.deliveryTime!],
 				};
 			}
 		}
@@ -149,6 +149,7 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 	</section>
 
 	<section
+		v-if="prismicData?.productsComparisons && products"
 		id="cennik"
 		class="mt-[100px] sm:mt-60 w-full max-w-[420px] sm:max-w-[660px] lg:max-w-[1100px] px-5 md:px-0 lg:px-5 xl:px-0 mx-auto scroll-mt-[70px]"
 	>
@@ -171,7 +172,7 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 			class="flex flex-col lg:flex-row gap-y-16 gap-x-10 max-w-[420px] lg:max-w-[1100px] mx-auto"
 		>
 			<div
-				v-for="product in data"
+				v-for="product in products"
 				:key="product.name"
 				class="px-5 py-8 border border-gray-400 rounded-lg relative z-0 w-full grid grid-rows-[auto_auto_auto_auto_1fr_auto_auto]"
 				:class="{ 'shadow shadow-theme-200': product.mostPopular }"
@@ -189,15 +190,15 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 				>
 					{{ product.name }}
 				</h3>
-				<p class="text-3xl font-bold text-gray-100">{{ product.price }}</p>
+				<p class="text-3xl font-bold text-gray-100">{{ product.price }} €</p>
 				<p class="text-xs text-gray-300 font-semibold mb-2">s DPH</p>
 				<p class="text-base text-gray-200">{{ product.description }}</p>
 
 				<div class="h-full"></div>
 
-				<ul class="mt-10 flex flex-col gap-y-3">
+				<ul v-if="prismicData.productsComparisons[product.id]" class="mt-10 flex flex-col gap-y-3">
 					<li
-						v-for="[comp, val] in product.comparisons"
+						v-for="[comp, val] in prismicData.productsComparisons[product.id]"
 						:key="comp"
 						class="flex items-center justify-between text-gray-200"
 					>
@@ -207,10 +208,7 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 							class="w-6 h-6"
 							:class="{ 'text-theme': product.mostPopular }"
 						/>
-						<IconsCloseCircle
-							v-else-if="typeof val === 'boolean' && !val"
-							class="w-6 h-6 text-gray-300"
-						/>
+						<IconsCloseCircle v-else-if="val === null" class="w-6 h-6 text-gray-300" />
 						<p v-else class="min-w-[24px] text-center block">
 							{{ val }}
 						</p>

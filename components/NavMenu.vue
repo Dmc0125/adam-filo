@@ -69,7 +69,7 @@ function closeOnClick(url: string) {
 				<Transition appear name="links">
 					<ul
 						class="mt-10 lg:mt-12 xl:mt-16 flex items-center gap-x-10 text-gray-100"
-						:style="{ 'transition-delay': `${links.length * 150}ms` }"
+						:style="{ 'transition-delay': `${(links.length + 1) * 150}ms` }"
 					>
 						<li>
 							<a
