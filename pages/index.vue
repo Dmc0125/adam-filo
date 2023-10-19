@@ -154,12 +154,13 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 		</ul>
 	</section>
 
-	<NavItem v-slot="{ setRef }" path="/#cennik">
+	<NavItem v-slot="{ setRef, className }" path="/#cennik" :animate="true">
 		<section
 			v-if="prismicData?.productsComparisons && products"
 			id="cennik"
 			:ref="(el) => setRef(el as HTMLElement)"
 			class="mt-[100px] sm:mt-60 w-full max-w-[420px] sm:max-w-[660px] lg:max-w-[1100px] px-5 md:px-0 lg:px-5 xl:px-0 mx-auto scroll-mt-[70px]"
+			:class="className"
 		>
 			<h2 class="text-3xl text-gray-100">Cenník</h2>
 			<p class="text-base text-gray-200 mt-4">
@@ -240,12 +241,13 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 		</section>
 	</NavItem>
 
-	<NavItem v-slot="{ setRef }" path="/#moja-praca">
+	<NavItem v-slot="{ setRef, className }" path="/#moja-praca" :animate="true">
 		<section
 			v-if="prismicData"
 			id="moja-praca"
 			:ref="(el) => setRef(el as HTMLElement)"
 			class="mt-[100px] sm:mt-60 w-full px-5 mx-auto scroll-mt-[70px]"
+			:class="className"
 		>
 			<h2
 				class="w-full max-w-[420px] md:max-w-[800px] xl:max-w-[1100px] mx-auto block text-3xl text-gray-100 mb-8"

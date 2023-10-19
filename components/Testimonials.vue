@@ -40,11 +40,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<NavItem v-slot="{ setRef }" path="/#hodnotenia">
+	<NavItem v-slot="{ setRef, className }" path="/#hodnotenia" :animate="true">
 		<section
 			id="hodnotenia"
 			:ref="(el) => setRef(el as HTMLElement)"
 			class="max-w-[420px] md:max-w-full sm:px-0 md:px-5 mx-auto w-full mt-[100px] sm:mt-60 scroll-mt-[70px]"
+			:class="className"
 		>
 			<div
 				v-if="data"
