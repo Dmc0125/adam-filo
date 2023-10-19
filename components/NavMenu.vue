@@ -15,9 +15,11 @@ const route = useRoute();
 watch(
 	() => route.fullPath,
 	() => {
-		console.log(route.fullPath);
-		console.log('hello');
+		activePath.value = route.fullPath;
 		emits('close');
+	},
+	{
+		immediate: true,
 	},
 );
 
@@ -58,7 +60,7 @@ function closeOnClick(url: string) {
 							:href="link.url"
 							style="font-family: 'DM Serif Display'"
 							class="link w-full text-gray-100 text-3xl lg:text-4xl xl:text-6xl hover:text-theme flex items-center justify-between"
-							:class="{ 'text-theme': route.fullPath == link.url }"
+							:class="{ 'text-theme': activePath === link.url }"
 							>{{ link.name }}
 							<IconsArrow
 								class="hidden sm:block h-10 lg:h-14 xl:h-16 aspect-square opacity-0 text-dark-100 transition-all -translate-x-2"
@@ -71,25 +73,10 @@ function closeOnClick(url: string) {
 						class="mt-10 lg:mt-12 xl:mt-16 flex items-center gap-x-10 text-gray-100"
 						:style="{ 'transition-delay': `${(links.length + 1) * 150}ms` }"
 					>
-						<li>
-							<a
-								href="https://instagram.com/adamfilo"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="w-12 h-12 p-1 block"
-							>
-								<IconsMail class="w-full h-full"></IconsMail>
-							</a>
-						</li>
-						<li>
-							<a
-								href="mailto:kontakt@adamfilo.com"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="w-12 h-12 p-1 block"
-							>
-								<IconsInstagram class="w-full h-full"></IconsInstagram>
-							</a>
+						<li v-for="social in socials" :key="social.url" class="block">
+							<IconLink :url="social.url" class="w-12 h-12">
+								<component :is="social.icon"></component>
+							</IconLink>
 						</li>
 					</ul>
 				</Transition>

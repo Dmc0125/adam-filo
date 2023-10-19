@@ -1,20 +1,5 @@
 <script lang="ts" setup>
-import Mail from '@/components/icons/Mail.vue';
-import Instagram from '@/components/icons/Instagram.vue';
-
 const isMenuOpen = ref(false);
-
-type Social = {
-	url: string;
-	icon: typeof Mail;
-};
-
-const socials: Social[] = [
-	{ url: 'mailto:kontakt@adamfilo.com', icon: Mail },
-	{ url: 'https://instagram.com/adam_filo_', icon: Instagram },
-];
-
-const route = useRoute();
 const isScrolled = ref(false);
 
 function handleScroll() {
@@ -41,16 +26,9 @@ onUnmounted(() => {
 			<h1 class="font-[Inter] font-semibold text-2xl">Adam Filo</h1>
 
 			<nav class="flex gap-x-6">
-				<a
-					v-for="social in socials"
-					:key="social.url"
-					:href="social.url"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="hidden md:block"
-				>
-					<component :is="social.icon" class="w-10 h-10 p-1"></component>
-				</a>
+				<IconLink v-for="social in socials" :key="social.url" :url="social.url" class="w-10 h-10">
+					<component :is="social.icon"></component>
+				</IconLink>
 
 				<button class="w-10 h-10 p-1" @click="isMenuOpen = !isMenuOpen">
 					<IconsMenu class="w-full h-full"></IconsMenu>
@@ -65,14 +43,9 @@ onUnmounted(() => {
 		>
 			<ul class="flex gap-x-2 sm:gap-x-4">
 				<li v-for="social in socials" :key="social.url">
-					<a
-						:href="social.url"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="w-10 h-10 p-1 block"
-					>
-						<component :is="social.icon" class="h-full aspect-square"></component>
-					</a>
+					<IconLink :url="social.url" class="w-10 h-10">
+						<component :is="social.icon"></component>
+					</IconLink>
 				</li>
 			</ul>
 
@@ -82,7 +55,7 @@ onUnmounted(() => {
 						<NuxtLink
 							:to="link.url"
 							class="text-sm md:text-base hover:text-theme"
-							:class="{ 'text-theme': route.fullPath == link.url }"
+							:class="{ 'text-theme': activePath === link.url }"
 							>{{ link.name }}</NuxtLink
 						>
 					</li>
