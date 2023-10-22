@@ -1,4 +1,84 @@
 <script setup lang="ts">
+import { z } from 'zod';
+import {
+	Testimonial,
+	compsLabelsSchema,
+	logoSchema,
+	productCompsSchema,
+	testimonialSchema,
+} from '~/utils/schemas';
+
+type Product = {
+	description: string;
+	mostPopular: boolean;
+	name: string;
+	price: string;
+	comps: Omit<z.infer<typeof productCompsSchema>, 'stripeId'>;
+};
+
+const { data, error } = await useAsyncData('content', async () => {
+	const storyblok = useStoryblokApi();
+
+	const [stories, stripeProducts] = await Promise.all([
+		storyblok.getStories({ token: process.env.STORYBLOK_ACCESS_TOKEN }),
+		$fetch('/api/products'),
+	]);
+
+	let labels = {} as z.infer<typeof compsLabelsSchema>;
+	const logos: z.infer<typeof logoSchema>[] = [];
+	const productsComps: Record<string, Omit<z.infer<typeof productCompsSchema>, 'stripeId'>> = {};
+	const testimonials: Testimonial[] = [];
+
+	for (const story of stories.data.stories) {
+		if (story.full_slug === 'products-comps-labels') {
+			const parseResult = compsLabelsSchema.safeParse(story.content);
+
+			if (!parseResult.success) {
+				return null;
+			}
+
+			labels = parseResult.data;
+		} else if (story.full_slug.startsWith('logos/')) {
+			const result = logoSchema.safeParse(story.content);
+			if (!result.success) {
+				return null;
+			}
+			logos.push(result.data);
+		} else if (story.full_slug.startsWith('products-comps/')) {
+			const result = productCompsSchema.safeParse(story.content);
+			if (!result.success) {
+				return null;
+			}
+			productsComps[result.data.stripeId] = result.data;
+		} else if (story.full_slug.startsWith('testimonials')) {
+			const result = testimonialSchema.safeParse(story.content);
+			if (!result.success) {
+				return null;
+			}
+			testimonials.push(result.data);
+		}
+	}
+
+	const products: Product[] = [];
+
+	for (const product of stripeProducts) {
+		const comps = productsComps[product.id];
+		products.push({
+			...product,
+			comps,
+		});
+	}
+
+	return { labels, logos, products, testimonials };
+});
+
+if (error.value || !data.value) {
+	throw createError({
+		statusCode: 500,
+		statusMessage: 'Unknown server error. Please try again later',
+	});
+}
+
 useSeoMeta({
 	title: 'Adam Filo',
 });
@@ -31,19 +111,8 @@ const stats: (Stat | { isDivider: true })[] = [
 	{ isDivider: false, data: '100%', name: 'Kvalita komunikácie' },
 ];
 
-const { data: products } = await useFetch('/api/products');
-
 type LogoSize = 'lg' | 'sm';
 type LogoPosition = 'left' | 'right';
-
-type Logo = {
-	title: string;
-	id: string;
-	description: string;
-	span: string;
-	imgUrl: string;
-	imgAlt: string;
-};
 
 function getLogoSpan(size: LogoSize, position: LogoPosition): string {
 	if (size === 'lg' && position === 'left') {
@@ -55,60 +124,6 @@ function getLogoSpan(size: LogoSize, position: LogoPosition): string {
 	}
 	return '3/4';
 }
-
-type ProductComparison = {
-	designs: [string, number];
-	revisions: [string, number];
-	highRes: [string, boolean | null];
-	sourceData: [string, boolean | null];
-	fbPic: [string, boolean | null];
-	deliveryTime: [string, number];
-	mockup: [string, boolean | null];
-};
-
-const { client } = usePrismic();
-const { data: prismicData } = useAsyncData('logos', async () => {
-	const res = await client.getByType('landing');
-	if (!res) {
-		return null;
-	}
-	const { slices } = res.results[0].data;
-
-	const _logos: Logo[] = [];
-	const productsComparisons: Record<string, ProductComparison> = {};
-
-	slices.forEach((slice) => {
-		switch (slice.slice_type) {
-			case 'logo': {
-				_logos.push({
-					title: slice.primary.title!,
-					id: slice.primary.detailsid!,
-					description: slice.primary.description!,
-					span: getLogoSpan(slice.primary.size as LogoSize, slice.primary.position as LogoPosition),
-					imgAlt: slice.primary.img.alt!,
-					imgUrl: slice.primary.img.url!,
-				});
-				break;
-			}
-			case 'products_comparisons': {
-				productsComparisons[slice.primary.productId!] = {
-					designs: ['Počet návrhov', slice.primary.designs!],
-					revisions: ['Počet revízií', slice.primary.revisions!],
-					highRes: ['Vysoké rozlíšenie', slice.primary.highres],
-					mockup: ['3D Mockup', slice.primary['3dMockup']],
-					sourceData: ['Zdrojové dáta', slice.primary.sourcedata],
-					fbPic: ['FB Profilovka', slice.primary.fbPic],
-					deliveryTime: ['Dĺžka dodania', slice.primary.deliveryTime!],
-				};
-			}
-		}
-	});
-
-	return {
-		logos: _logos,
-		productsComparisons,
-	};
-});
 </script>
 
 <template>
@@ -175,7 +190,6 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 
 	<NavItem v-slot="{ setRef, className }" path="/#cennik" :animate="true">
 		<section
-			v-if="prismicData?.productsComparisons && products"
 			id="cennik"
 			:ref="(el) => setRef(el as HTMLElement)"
 			class="mt-[100px] sm:mt-60 w-full max-w-[420px] sm:max-w-[660px] lg:max-w-[1100px] px-5 md:px-0 lg:px-5 xl:px-0 mx-auto scroll-mt-[70px]"
@@ -200,7 +214,7 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 				class="flex flex-col lg:flex-row gap-y-16 gap-x-10 max-w-[420px] lg:max-w-[1100px] mx-auto"
 			>
 				<div
-					v-for="product in products"
+					v-for="product in data!.products"
 					:key="product.name"
 					class="px-5 py-8 border border-gray-400 rounded-lg relative z-0 w-full grid grid-rows-[auto_auto_auto_auto_1fr_auto_auto]"
 					:class="{ 'shadow shadow-theme-200': product.mostPopular }"
@@ -224,24 +238,24 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 
 					<div class="h-full"></div>
 
-					<ul
-						v-if="prismicData.productsComparisons[product.id]"
-						class="mt-10 flex flex-col gap-y-3"
-					>
+					<ul class="mt-10 flex flex-col gap-y-3">
 						<li
-							v-for="[comp, val] in prismicData.productsComparisons[product.id]"
-							:key="comp"
+							v-for="(label, labelKey) in data!.labels"
+							:key="label"
 							class="flex items-center justify-between text-gray-200"
 						>
-							<p>{{ comp }}</p>
+							<p>{{ label }}</p>
 							<IconsCheckmark
-								v-if="typeof val === 'boolean' && val"
+								v-if="typeof product.comps[labelKey] === 'boolean' && product.comps[labelKey]"
 								class="w-6 h-6"
 								:class="{ 'text-theme': product.mostPopular }"
 							/>
-							<IconsCloseCircle v-else-if="val === null" class="w-6 h-6 text-gray-300" />
+							<IconsCloseCircle
+								v-else-if="typeof product.comps[labelKey] === 'boolean' && !product.comps[labelKey]"
+								class="w-6 h-6 text-gray-300"
+							/>
 							<p v-else class="min-w-[24px] text-center block">
-								{{ val }}
+								{{ product.comps[labelKey] }}
 							</p>
 						</li>
 					</ul>
@@ -262,7 +276,6 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 
 	<NavItem v-slot="{ setRef, className }" path="/#moja-praca" :animate="true">
 		<section
-			v-if="prismicData"
 			id="moja-praca"
 			:ref="(el) => setRef(el as HTMLElement)"
 			class="mt-[100px] sm:mt-60 w-full px-5 mx-auto scroll-mt-[70px]"
@@ -278,23 +291,22 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 				class="w-full max-w-[420px] md:max-w-[800px] xl:max-w-[1100px] mx-auto md:grid grid-cols-[1fr_10%_1fr] grid-rows-[1fr_1fr] gap-x-10 xl:gap-x-16 gap-y-12 xl:gap-y-20"
 			>
 				<div
-					v-for="logo in prismicData.logos"
-					:key="logo.title"
+					v-for="logo in data!.logos"
+					:key="logo.slug"
 					class="[&:not(&:first-child)]:mt-14 md:!mt-0"
-					:style="{ 'grid-column': logo.span }"
-					:class="[logo.span]"
+					:style="{ 'grid-column': getLogoSpan(logo.size, logo.position) }"
 				>
 					<img
-						:src="logo.imgUrl"
+						:src="logo.img.filename"
 						:alt="logo.imgAlt"
 						class="w-full rounded-lg border border-gray-400"
 						loading="lazy"
 					/>
 
 					<div class="w-full flex items-center justify-between mt-5">
-						<h3 class="text-2xl text-gray-100">{{ logo.title }}</h3>
+						<h3 class="text-2xl text-gray-100">{{ logo.name }}</h3>
 						<NuxtLink
-							:href="`/${logo.id}`"
+							:href="`/${logo.slug}`"
 							class="see-more text-gray-200 text-sm font-medium flex items-center border border-dark-100 rounded-md sm:px-5 sm:py-2 sm:hover:bg-dark-300 sm:hover:border-gray-400 sm:hover:text-theme transition-all"
 						>
 							Vidieť viac
@@ -309,7 +321,7 @@ const { data: prismicData } = useAsyncData('logos', async () => {
 		</section>
 	</NavItem>
 
-	<Testimonials />
+	<Testimonials :testimonials="data!.testimonials" />
 </template>
 
 <style scoped lang="postcss">

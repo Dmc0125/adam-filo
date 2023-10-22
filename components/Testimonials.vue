@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-type Testimonial = {
-	credentials: string;
-	name: string;
-	content: string;
-	picture?: string;
+import { Testimonial as TTestimonial } from '~/utils/schemas';
+
+type Props = {
+	testimonials: Testimonial[];
 };
 
-const { data } = await useAsyncData('testimonials', () => queryContent('testimonials').find());
+const props = defineProps<Props>();
 
-function intoChunks(all: Testimonial[], chunkSize = 3): Testimonial[][] {
-	const chunks: Testimonial[][] = [];
+function intoChunks(all: TTestimonial[], chunkSize = 3): TTestimonial[][] {
+	const chunks: TTestimonial[][] = [];
 
 	for (let i = 0; i < all.length; i += chunkSize) {
 		chunks.push(all.slice(i, i + chunkSize));
@@ -18,8 +17,8 @@ function intoChunks(all: Testimonial[], chunkSize = 3): Testimonial[][] {
 	return chunks;
 }
 
-const chunksOfThree = data.value ? intoChunks(data.value[0].body as unknown as Testimonial[]) : [];
-const chunksOfTwo = data.value ? intoChunks(data.value[0].body as unknown as Testimonial[], 2) : [];
+const chunksOfThree = intoChunks(props.testimonials);
+const chunksOfTwo = intoChunks(props.testimonials, 2);
 
 const activeSlide = ref(1);
 const wrapperRef = ref<HTMLElement | undefined>();
@@ -48,7 +47,6 @@ onUnmounted(() => {
 			:class="className"
 		>
 			<div
-				v-if="data"
 				ref="wrapperRef"
 				class="max-w-[calc(100vw-40px)] md:max-w-[800px] md:w-full mx-auto xl:max-w-[1100px]"
 			>
