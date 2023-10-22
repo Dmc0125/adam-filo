@@ -189,7 +189,7 @@ function getLogoSpan(size: LogoSize, position: LogoPosition): string {
 		</ul>
 	</section>
 
-	<NavItem v-slot="{ setRef, className }" path="/#cennik" :animate="true">
+	<NavItem v-slot="{ setRef, className }" path="/#pricing" :animate="true">
 		<section
 			id="pricing"
 			:ref="(el) => setRef(el as HTMLElement)"
@@ -275,7 +275,7 @@ function getLogoSpan(size: LogoSize, position: LogoPosition): string {
 		</section>
 	</NavItem>
 
-	<NavItem v-slot="{ setRef, className }" path="/#moja-praca" :animate="true">
+	<NavItem v-slot="{ setRef, className }" path="/#my-work" :animate="true">
 		<section
 			id="my-work"
 			:ref="(el) => setRef(el as HTMLElement)"

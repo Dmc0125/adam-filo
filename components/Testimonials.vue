@@ -39,7 +39,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<NavItem v-slot="{ setRef, className }" path="/#hodnotenia" :animate="true">
+	<NavItem v-slot="{ setRef, className }" path="/#testimonials" :animate="true">
 		<section
 			id="testimonials"
 			:ref="(el) => setRef(el as HTMLElement)"
