@@ -34,9 +34,10 @@ export const activePath = ref('/');
 export type Social = {
 	url: string;
 	icon: typeof Mail;
+	label: string;
 };
 
 export const socials: Social[] = [
-	{ url: 'mailto:kontakt@adamfilo.com', icon: Mail },
-	{ url: 'https://instagram.com/adam_filo_', icon: Instagram },
+	{ url: 'mailto:kontakt@adamfilo.com', icon: Mail, label: 'emailová adresa' },
+	{ url: 'https://instagram.com/adam_filo_', icon: Instagram, label: 'instagram' },
 ];

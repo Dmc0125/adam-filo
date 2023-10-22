@@ -1,4 +1,10 @@
 <script lang="ts" setup>
+useHead({
+	htmlAttrs: {
+		lang: 'sk-SK',
+	},
+});
+
 const isMenuOpen = ref(false);
 const isScrolled = ref(false);
 
@@ -32,12 +38,18 @@ function handleHome(url: string) {
 			<h1 class="font-[Inter] font-semibold text-2xl">Adam Filo</h1>
 
 			<nav class="flex gap-x-6">
-				<IconLink v-for="social in socials" :key="social.url" :url="social.url" class="w-10 h-10">
-					<component :is="social.icon"></component>
+				<IconLink
+					v-for="social in socials"
+					:key="social.url"
+					:url="social.url"
+					class="w-10 h-10"
+					:aria-label="social.label"
+				>
+					<component :is="social.icon" aria-hidden></component>
 				</IconLink>
 
-				<button class="w-10 h-10 p-1" @click="isMenuOpen = !isMenuOpen">
-					<IconsMenu class="w-full h-full"></IconsMenu>
+				<button aria-label="menu" class="w-10 h-10 p-1" @click="isMenuOpen = !isMenuOpen">
+					<IconsMenu aria-hidden class="w-full h-full"></IconsMenu>
 				</button>
 			</nav>
 		</header>
@@ -49,8 +61,8 @@ function handleHome(url: string) {
 		>
 			<ul class="flex gap-x-2 sm:gap-x-4">
 				<li v-for="social in socials" :key="social.url">
-					<IconLink :url="social.url" class="w-10 h-10">
-						<component :is="social.icon"></component>
+					<IconLink :url="social.url" class="w-10 h-10" :aria-label="social.label">
+						<component :is="social.icon" aria-hidden></component>
 					</IconLink>
 				</li>
 			</ul>

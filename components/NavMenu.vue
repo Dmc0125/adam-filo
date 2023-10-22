@@ -81,8 +81,8 @@ function handleHome(url: string) {
 						:style="{ 'transition-delay': `${(links.length + 1) * 150}ms` }"
 					>
 						<li v-for="social in socials" :key="social.url" class="block">
-							<IconLink :url="social.url" class="w-12 h-12">
-								<component :is="social.icon"></component>
+							<IconLink :url="social.url" class="w-12 h-12" :aria-label="social.label">
+								<component :is="social.icon" aria-hidden></component>
 							</IconLink>
 						</li>
 					</ul>
