@@ -17,15 +17,15 @@ export const links: Link[] = [
 	},
 	{
 		name: 'Cenník',
-		url: '/#cennik',
+		url: '/#pricing',
 	},
 	{
 		name: 'Moja práca',
-		url: '/#moja-praca',
+		url: '/#my-work',
 	},
 	{
 		name: 'Hodnotenia',
-		url: '/#hodnotenia',
+		url: '/#testimonials',
 	},
 ];
 

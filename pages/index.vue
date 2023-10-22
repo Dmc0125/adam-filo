@@ -6,6 +6,7 @@ import {
 	logoSchema,
 	productCompsSchema,
 	testimonialSchema,
+	workStatSchema,
 } from '~/utils/schemas';
 
 type Product = {
@@ -15,6 +16,8 @@ type Product = {
 	price: string;
 	comps: Omit<z.infer<typeof productCompsSchema>, 'stripeId'>;
 };
+
+type WorkStat = { divider: undefined } & z.infer<typeof workStatSchema>;
 
 const { data, error } = await useAsyncData('content', async () => {
 	const storyblok = useStoryblokApi();
@@ -28,6 +31,7 @@ const { data, error } = await useAsyncData('content', async () => {
 	const logos: z.infer<typeof logoSchema>[] = [];
 	const productsComps: Record<string, Omit<z.infer<typeof productCompsSchema>, 'stripeId'>> = {};
 	const testimonials: Testimonial[] = [];
+	const workStats: (WorkStat | { divider: true })[] = [];
 
 	for (const story of stories.data.stories) {
 		if (story.full_slug === 'products-comps-labels') {
@@ -50,12 +54,22 @@ const { data, error } = await useAsyncData('content', async () => {
 				return null;
 			}
 			productsComps[result.data.stripeId] = result.data;
-		} else if (story.full_slug.startsWith('testimonials')) {
+		} else if (story.full_slug.startsWith('testimonials/')) {
 			const result = testimonialSchema.safeParse(story.content);
 			if (!result.success) {
 				return null;
 			}
 			testimonials.push(result.data);
+		} else if (story.full_slug.startsWith('work-stats/')) {
+			const result = workStatSchema.safeParse(story.content);
+			if (!result.success) {
+				return null;
+			}
+			if (workStats.length % 2 === 1) {
+				workStats.push({ divider: true });
+			}
+			// @ts-ignore
+			workStats.push(result.data);
 		}
 	}
 
@@ -69,7 +83,7 @@ const { data, error } = await useAsyncData('content', async () => {
 		});
 	}
 
-	return { labels, logos, products, testimonials };
+	return { labels, logos, products, testimonials, workStats };
 });
 
 if (error.value || !data.value) {
@@ -98,19 +112,6 @@ useServerSeoMeta({
 	twitterDescription: 'Vylepšite svoj imidž a urobte pôsobivý prvý dojem',
 });
 
-type Stat = {
-	isDivider: false;
-	data: string;
-	name: string;
-};
-const stats: (Stat | { isDivider: true })[] = [
-	{ isDivider: false, data: '173', name: 'Zákaziek' },
-	{ isDivider: true },
-	{ isDivider: false, data: '100%', name: 'Zákazníkov doporučuje' },
-	{ isDivider: true },
-	{ isDivider: false, data: '100%', name: 'Kvalita komunikácie' },
-];
-
 type LogoSize = 'lg' | 'sm';
 type LogoPosition = 'left' | 'right';
 
@@ -129,7 +130,7 @@ function getLogoSpan(size: LogoSize, position: LogoPosition): string {
 <template>
 	<NavItem v-slot="{ setRef }" path="/">
 		<section
-			id="domov"
+			id="home"
 			:ref="(el) => setRef(el as HTMLElement)"
 			class="mt-[25vh] w-full max-w-[420px] sm:max-w-[1100px] px-5 xl:px-0 mx-auto"
 		>
@@ -147,7 +148,7 @@ function getLogoSpan(size: LogoSize, position: LogoPosition): string {
 					>Kontaktuje ma</NuxtLink
 				>
 				<NuxtLink
-					href="/#moja-praca"
+					href="/#my-work"
 					class="w-full sm:w-[200px] md:w-[290px] h-14 bg-dark-300 text-gray-100 border border-gray-400 rounded-md text-xl flex items-center justify-center"
 					>Moja práca</NuxtLink
 				>
@@ -156,7 +157,7 @@ function getLogoSpan(size: LogoSize, position: LogoPosition): string {
 	</NavItem>
 
 	<section
-		id="o-mne"
+		id="about-me"
 		class="mt-40 sm:mt-60 md:mt-[320px] grid sm:gap-x-16 md:gap-x-20 sm:grid-rows-[min-content_1fr_auto] sm:grid-cols-2 w-full max-w-[420px] sm:max-w-[660px] px-5 md:px-0 mx-auto scroll-mt-[70px]"
 	>
 		<h2 class="text-gray-100 text-3xl mb-4 sm:col-[2/3]">O mne</h2>
@@ -175,22 +176,22 @@ function getLogoSpan(size: LogoSize, position: LogoPosition): string {
 		</p>
 
 		<ul class="mt-12 sm:mt-16 flex flex-col sm:flex-row justify-between gap-y-5 sm:col-[1/3]">
-			<li v-for="(stat, i) in stats" :key="i">
+			<li v-for="(stat, i) in data!.workStats" :key="i">
 				<h6
-					v-if="!stat.isDivider"
+					v-if="!stat.divider"
 					class="text-theme font-[Inter] font-semibold text-3xl sm:text-center"
 				>
-					{{ stat.data }}
+					{{ stat.value }}
 				</h6>
-				<p v-if="!stat.isDivider" class="text-gray-100">{{ stat.name }}</p>
-				<div v-if="stat.isDivider" class="hidden sm:block bg-gray-400 h-12 w-[1px]"></div>
+				<p v-if="!stat.divider" class="text-gray-100">{{ stat.name }}</p>
+				<div v-else class="hidden sm:block bg-gray-400 h-12 w-[1px]"></div>
 			</li>
 		</ul>
 	</section>
 
 	<NavItem v-slot="{ setRef, className }" path="/#cennik" :animate="true">
 		<section
-			id="cennik"
+			id="pricing"
 			:ref="(el) => setRef(el as HTMLElement)"
 			class="mt-[100px] sm:mt-60 w-full max-w-[420px] sm:max-w-[660px] lg:max-w-[1100px] px-5 md:px-0 lg:px-5 xl:px-0 mx-auto scroll-mt-[70px]"
 			:class="className"
@@ -276,7 +277,7 @@ function getLogoSpan(size: LogoSize, position: LogoPosition): string {
 
 	<NavItem v-slot="{ setRef, className }" path="/#moja-praca" :animate="true">
 		<section
-			id="moja-praca"
+			id="my-work"
 			:ref="(el) => setRef(el as HTMLElement)"
 			class="mt-[100px] sm:mt-60 w-full px-5 mx-auto scroll-mt-[70px]"
 			:class="className"

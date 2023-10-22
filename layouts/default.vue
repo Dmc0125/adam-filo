@@ -14,6 +14,12 @@ onMounted(() => {
 onUnmounted(() => {
 	window.removeEventListener('scroll', handleScroll);
 });
+
+function handleHome(url: string) {
+	if (url === '/') {
+		window.scrollTo({ top: 0 });
+	}
+}
 </script>
 
 <template>
@@ -56,6 +62,7 @@ onUnmounted(() => {
 							:to="link.url"
 							class="text-sm md:text-base hover:text-theme"
 							:class="{ 'text-theme': activePath === link.url }"
+							@click="handleHome(link.url)"
 							>{{ link.name }}</NuxtLink
 						>
 					</li>

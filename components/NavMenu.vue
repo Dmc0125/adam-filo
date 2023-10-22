@@ -28,6 +28,12 @@ function closeOnClick(url: string) {
 		emits('close');
 	}
 }
+
+function handleHome(url: string) {
+	if (url === '/') {
+		window.scrollTo({ top: 0 });
+	}
+}
 </script>
 
 <template>
@@ -42,7 +48,7 @@ function closeOnClick(url: string) {
 				</button>
 			</div>
 
-			<nav class="w-1/2 h-fit ml-[15%]">
+			<nav class="w-fit sm:w-1/2 h-fit mx-auto">
 				<TransitionGroup
 					appear
 					tag="ul"
@@ -61,6 +67,7 @@ function closeOnClick(url: string) {
 							style="font-family: 'DM Serif Display'"
 							class="link w-full text-gray-100 text-3xl lg:text-4xl xl:text-6xl hover:text-theme flex items-center justify-between"
 							:class="{ 'text-theme': activePath === link.url }"
+							@click="handleHome(link.url)"
 							>{{ link.name }}
 							<IconsArrow
 								class="hidden sm:block h-10 lg:h-14 xl:h-16 aspect-square opacity-0 text-dark-100 transition-all -translate-x-2"

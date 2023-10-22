@@ -46,3 +46,8 @@ export const testimonialSchema = z.object({
 	picture: z.string().optional(),
 });
 export type Testimonial = z.infer<typeof testimonialSchema>;
+
+export const workStatSchema = z.object({
+	value: z.string().min(1),
+	name: z.string().min(1),
+});
